@@ -158,7 +158,7 @@ agent-readiness/{YYYY-MM-DD}/
 2. **The no-JS check is not a rendering test.** It reads the HTML as served. It cannot tell you how a JavaScript-capable crawler renders the page.
 3. **A feed export is not Merchant Center's verdict.** The audit checks the file against the seven attributes above. Merchant Center diagnostics, account-level policies, UCP onboarding status and anything else Merchant Center may require for your products live in the account.
 4. **Being allowed is not being cited.** This audit checks whether agents *can* use the site. Whether they *do* needs a separate measurement, such as probing AI answers for the brand or reading a search engine's AI-performance reports.
-5. **An unreachable robots.txt is reported as skipped, not as "disallow all".** RFC 9309 says a crawler must assume complete disallow when robots.txt is unreachable because of a server or network error (5xx), and may access anything on a 4xx. With `--fetch`, the script treats 4xx as allow-all but reports any other failure as a skipped check. Read the `fetched` array for the HTTP status before telling the owner their robots.txt is fine.
+5. **An unreachable robots.txt fails the robots check.** RFC 9309 lets a crawler access anything when robots.txt returns a 4xx, and tells it to assume complete disallow when a server or network error (5xx) makes robots.txt unreachable. With `--fetch`, the script does the same: a 4xx is allow-all, and a 5xx or network error blocks every crawler, with a first finding that says so. If the cause was your own network rather than the site, re-run; the `fetched` array shows the HTTP status.
 
 ## What this is not
 

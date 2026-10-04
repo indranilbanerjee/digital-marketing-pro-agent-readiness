@@ -279,10 +279,11 @@ class TestSameFetchBehaviour(unittest.TestCase):
             "200 robots and page": (serving(fx.ROBOTS_BLOCKS_SEARCH, fx.HTML_GOOD), site + pages),
             "robots 404 is allow-all": (serving(404, fx.HTML_GOOD), site),
             "robots 410 is allow-all": (serving(410, fx.HTML_SPA_SHELL), site + pages),
-            "robots 503 is skipped": (serving(503, fx.HTML_GOOD), site),
+            "robots 503 means disallow-all": (serving(503, fx.HTML_GOOD), site),
             "page network error": (serving(fx.ROBOTS_OPEN, None), site),
             "page 500": (serving(fx.ROBOTS_OPEN, 500), site),
             "everything fails": (serving(503, 503), site),
+            "bad site url": (serving(fx.ROBOTS_OPEN, fx.HTML_GOOD), ["--site", "ftp://acme.example", "--fetch"]),
         }
         for name, (handler, argv) in scenarios.items():
             with self.subTest(scenario=name):
@@ -290,7 +291,7 @@ class TestSameFetchBehaviour(unittest.TestCase):
                 self.assertEqual(hero, dmp)
         # the corpus saw both a report and an error, so the comparison is not vacuous
         kinds = {type(self._both(*scenarios[n])[0]).__name__ for n in
-                 ("200 robots and page", "everything fails")}
+                 ("200 robots and page", "bad site url")}
         self.assertEqual(kinds, {"dict", "tuple"})
 
     def test_user_agent_and_constants(self):

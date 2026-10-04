@@ -250,7 +250,6 @@ The same run without `--format text` prints JSON, which is long because it lists
 - **Not a rendering test.** The no-JavaScript check reads the HTML as served. It cannot tell you how a JavaScript-capable crawler renders the page.
 - **Not Merchant Center's verdict.** It checks a feed file against seven required attributes. Merchant Center diagnostics, account-level return policy and customer-support contact, and UCP onboarding live in the account.
 - **Not a guarantee that robots.txt keeps content out.** OpenAI says robots.txt "may not apply" to ChatGPT-User, and Perplexity says Perplexity-User "generally ignores robots.txt rules".
-- **Not strict about an unreachable robots.txt.** With `--fetch`, a 4xx response is treated as allow-all, which RFC 9309 permits. A 5xx or network failure is reported as a skipped check, whereas the RFC tells crawlers to assume "disallow all". Read the `fetched` array for the HTTP status before telling anyone their robots.txt is fine.
 
 ## Tests
 

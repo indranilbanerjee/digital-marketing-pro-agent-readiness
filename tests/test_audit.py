@@ -626,10 +626,10 @@ class TestStandaloneSkill(_Tmp):
         self.assertEqual(blocked, {"OAI-SearchBot", "GPTBot"})
 
 
-class TestUnreachableRobotsLimitation(unittest.TestCase):
-    """SKILL.md caveat 5 says an unreachable robots.txt is reported as skipped,
-    not as 'disallow all'. This pins that documented behaviour: if the script
-    ever starts treating 5xx as disallow-all, the caveat must change with it."""
+class TestUnreachableRobots(unittest.TestCase):
+    """SKILL.md caveat 5: per RFC 9309 a 4xx robots.txt means allow-all and a
+    5xx means complete disallow, so a 5xx fails the robots check with a finding
+    that says why. If the script's handling changes, the caveat must change too."""
 
     def _audit(self, robots_status):
         def fake_urlopen(req, timeout=15):
@@ -641,10 +641,12 @@ class TestUnreachableRobotsLimitation(unittest.TestCase):
             args = ara.build_parser().parse_args(["--site", "https://acme.example", "--fetch"])
             return ara.run_audit(args)
 
-    def test_503_robots_is_skipped_and_the_status_is_in_the_fetch_log(self):
+    def test_503_robots_means_complete_disallow_and_the_status_is_in_the_fetch_log(self):
         rep = self._audit(503)
         robots = next(c for c in rep["checks"] if c["id"] == "robots_ai_crawlers")
-        self.assertEqual(robots["status"], "skipped")
+        self.assertEqual(robots["status"], "fail")
+        self.assertIn("RFC 9309", robots["findings"][0])
+        self.assertTrue(all(b["verdict"] == "blocked" for b in robots["crawlers"]))
         self.assertEqual(rep["fetched"][0], {"url": "https://acme.example/robots.txt",
                                              "status": 503, "error": "HTTP 503"})
 
