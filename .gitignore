@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Scratch: exports and audit output you made while trying the skill
+# (anchored to the repository root so examples/ stays tracked)
+/audit.json
+/robots.txt
+/home.html
+/product.html
+/products.tsv
+/openai-feed.jsonl
+/agent-readiness/

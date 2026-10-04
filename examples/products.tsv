@@ -1,0 +1,3 @@
+id	title	description	link	image_link	availability	price	native_commerce(checkout_eligibility)	question_and_answer
+A1	Acme Anvil	Forged steel anvil	https://shop.example/a1	https://shop.example/a1.jpg	in_stock	119.99 USD	TRUE	Q: Weight? A: 55 kg
+A2	Acme Hammer	Forging hammer	https://shop.example/a2	https://shop.example/a2.jpg	in_stock		FALSE	
