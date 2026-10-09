@@ -255,8 +255,8 @@ class TestHonesty(unittest.TestCase):
                 imported |= {a.name.split(".")[0] for a in node.names}
             elif isinstance(node, ast.ImportFrom):
                 imported.add((node.module or "").split(".")[0])
-        self.assertLessEqual(imported, {"__future__", "argparse", "csv", "html", "io", "json",
-                                        "pathlib", "re", "sys", "urllib", "xml"})
+        self.assertLessEqual(imported, {"__future__", "argparse", "csv", "html", "io", "ipaddress", "json",
+                                        "pathlib", "re", "socket", "sys", "urllib", "xml"})
 
 
 class TestRepoFiles(unittest.TestCase):

@@ -248,7 +248,11 @@ class TestSameFetchBehaviour(unittest.TestCase):
     def _both(self, handler, argv):
         reports = []
         for mod in (self.hero, self.dmp):
-            with mock.patch.object(mod.urllib.request, "urlopen", side_effect=handler(mod)):
+            # Both copies send every request through _http_open behind a DNS-resolving
+            # guard; fake both so no real lookup or request happens.
+            public_dns = mock.patch("socket.getaddrinfo",
+                                    return_value=[(2, 1, 6, "", ("93.184.216.34", 443))])
+            with mock.patch.object(mod, "_http_open", side_effect=handler(mod)), public_dns:
                 try:
                     reports.append(mod.run_audit(mod.build_parser().parse_args(argv)))
                 except mod.BadInput as e:

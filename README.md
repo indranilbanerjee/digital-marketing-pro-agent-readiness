@@ -22,7 +22,7 @@ The script is standard-library Python. It makes no network request unless you pa
 
 - **Never recommends llms.txt for Google.** Google's [AI optimization guide](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide) lists "LLMS.txt files and other 'special' markup" under "Mythbusting generative AI search" and says "Google Search itself doesn't use them." The script prints that note on every run, and a test fails if an llms.txt recommendation ever shows up in its output.
 - **Never claims structured data is required for AI features.** Google says it isn't. The audit checks JSON-LD because it powers rich results.
-- **Never fetches unless you ask.** Everything runs on files you export. `--fetch` is opt-in, and every request it makes is listed in the output.
+- **Never fetches unless you ask.** Everything runs on files you export. `--fetch` is opt-in, and every request it makes is listed in the output. It fetches only public `http`/`https` addresses: redirects are followed by hand and every hop is checked, so loopback, private, link-local and cloud-metadata addresses (and `file://`) are refused.
 - **Never decides policy for you.** Whether to block training crawlers and whether to opt products into checkout are the owner's calls.
 - **Never says being allowed means being cited.** It checks whether agents can use the site, not whether they do.
 
