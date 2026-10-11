@@ -64,7 +64,7 @@ Ask for these if they would change the audit: whether the site sells products (f
 
 ## Running the audit
 
-`<skill-dir>` is the folder that contains this SKILL.md.
+`<skill-dir>` is the folder that contains this SKILL.md. Run the script with Python 3.10 or newer: `python`, or `python3` where `python` is not found (macOS, many Linux systems).
 
 ```bash
 python <skill-dir>/scripts/agent_readiness_audit.py \
