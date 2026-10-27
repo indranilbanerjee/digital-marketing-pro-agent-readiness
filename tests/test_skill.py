@@ -128,8 +128,8 @@ class TestDocsAgreeWithTheScript(unittest.TestCase):
         for bot in ara.AI_CRAWLERS:
             with self.subTest(token=bot["token"]):
                 self.assertIn(bot["token"], self.readme)
-        self.assertEqual(len(ara.AI_CRAWLERS), 11)
-        self.assertIn("Eleven tokens", self.readme)
+        self.assertEqual(len(ara.AI_CRAWLERS), 13)
+        self.assertIn("Thirteen tokens", self.readme)
 
     def test_every_vendor_source_url_is_cited_in_the_skill_table(self):
         for bot in ara.AI_CRAWLERS:

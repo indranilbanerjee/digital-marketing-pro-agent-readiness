@@ -8,7 +8,7 @@ It is the agent-readiness audit from Digital Marketing Pro, pulled out as a sing
 
 ## What it checks
 
-- **robots.txt, per AI crawler token**, parsed per RFC 9309: the most specific user-agent group, the longest matching rule, Allow wins ties, `*` and `$` wildcards. Eleven tokens: OAI-SearchBot, ChatGPT-User, OAI-AdsBot, GPTBot, Claude-SearchBot, Claude-User, ClaudeBot, PerplexityBot, Perplexity-User, Google-Extended and Applebot-Extended. A blocked search, user-fetch or ads bot fails. Training bots are the owner's policy: reported as info unless you pass `--training-policy allow|block`.
+- **robots.txt, per AI crawler token**, parsed per RFC 9309: the most specific user-agent group, the longest matching rule, Allow wins ties, `*` and `$` wildcards. Thirteen tokens: OAI-SearchBot, ChatGPT-User, OAI-AdsBot, GPTBot, Claude-SearchBot, Claude-User, ClaudeBot, PerplexityBot, Perplexity-User, Google-Agent, Google-GeminiNotebook, Google-Extended and Applebot-Extended. A robots.txt group that still names Google's retired `Google-NotebookLM` token warns. A blocked search, user-fetch or ads bot fails. Training bots are the owner's policy: reported as info unless you pass `--training-policy allow|block`.
 - **Structured data.** Product, Offer, Organization and FAQPage JSON-LD, `@graph` aware. An unparseable block fails; a Product without `offers` warns.
 - **No-JavaScript render.** Is the main content in the HTML the server sends? A client-side app shell, very little visible text, or a missing `--expect` phrase fails.
 - **Accessibility basics** (warn only): `<html lang>`, image alt text, labelled form fields, named buttons. Cheap proxies for the accessibility tree that browser agents may read.
@@ -249,7 +249,7 @@ The same run without `--format text` prints JSON, which is long because it lists
 - **Not a ranking or visibility predictor.** Allowed and well marked up does not mean cited, shown or recommended.
 - **Not a rendering test.** The no-JavaScript check reads the HTML as served. It cannot tell you how a JavaScript-capable crawler renders the page.
 - **Not Merchant Center's verdict.** It checks a feed file against seven required attributes. Merchant Center diagnostics, account-level return policy and customer-support contact, and UCP onboarding live in the account.
-- **Not a guarantee that robots.txt keeps content out.** OpenAI says robots.txt "may not apply" to ChatGPT-User, and Perplexity says Perplexity-User "generally ignores robots.txt rules".
+- **Not a guarantee that robots.txt keeps content out.** OpenAI says robots.txt "may not apply" to ChatGPT-User, Perplexity says Perplexity-User "generally ignores robots.txt rules", and Google says the same of its user-triggered fetchers. A CDN can also block crawlers regardless of robots.txt: since 15 Sep 2026, Cloudflare's "Block" setting stops Googlebot, Bingbot and Applebot too.
 
 ## Tests
 
@@ -272,6 +272,7 @@ Checked 2026-10-04, the date the script records as `sources_checked`.
 - Anthropic crawlers: https://support.claude.com/en/articles/8896518
 - Perplexity crawlers: https://docs.perplexity.ai/guides/bots
 - Google-Extended: https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers
+- Google-Agent and Google-GeminiNotebook (user-triggered fetchers; checked 2026-10-27): https://developers.google.com/crawling/docs/crawlers-fetchers/google-user-triggered-fetchers
 - Applebot-Extended: https://support.apple.com/en-us/119829
 - RFC 9309 (robots.txt): https://www.rfc-editor.org/rfc/rfc9309
 - Merchant listing markup: https://developers.google.com/search/docs/appearance/structured-data/merchant-listing
