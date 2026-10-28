@@ -466,6 +466,30 @@ class TestCliContract(_Tmp):
         _, code = self.audit("--training-policy", "sometimes")
         self.assertEqual(code, 2)
 
+    def test_a_path_not_starting_with_a_slash_exits_2(self):
+        # Git Bash on Windows rewrites "/products/" into "C:/Program Files/Git/products/"; the
+        # audit then tested a path that doesn't exist and said "ready". It refuses instead.
+        robots = self.write("r.txt", ROBOTS_OPEN)
+        for bad in ("products/", "C:/Program Files/Git/products/"):
+            with self.subTest(path=bad):
+                rep, code = self.audit("--robots", robots, "--path", bad)
+                self.assertEqual(code, 2)
+                self.assertIn("MSYS_NO_PATHCONV=1", rep["error"])
+
+    def test_a_double_slash_path_is_read_as_the_url_path(self):
+        # "//products/" is Git Bash's own escape for "/products/".
+        robots = self.write("r.txt", ROBOTS_BLOCKS_SEARCH)
+        self.assertEqual(self.audit("--robots", robots, "--path", "//products/"),
+                         self.audit("--robots", robots, "--path", "/products/"))
+
+    def test_an_empty_or_folder_file_path_exits_2(self):
+        # An empty --robots reads as "not given"; --html collects a list, so "" reaches the file read.
+        for bad, said in (("", "empty file path"), (str(self.dir), "cannot read")):
+            with self.subTest(path=bad):
+                rep, code = self.audit("--html", bad)
+                self.assertEqual(code, 2)
+                self.assertIn(said, rep["error"])
+
     def test_fetch_requires_site(self):
         rep, code = self.audit("--fetch")
         self.assertEqual(code, 2)

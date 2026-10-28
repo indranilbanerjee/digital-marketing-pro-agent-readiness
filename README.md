@@ -60,8 +60,10 @@ Save the HTML as the server sends it (`curl -L https://example.com/ > home.html`
 Or run the script yourself:
 
 ```bash
-# Offline, on exported files. --path tests more than "/" (repeatable).
-python skills/agent-readiness-audit/scripts/agent_readiness_audit.py \
+# Offline, on exported files. --path tests more than "/" (repeatable) and must start with "/".
+# Git Bash on Windows rewrites /products/ into a Windows folder unless MSYS_NO_PATHCONV=1 is set
+# (or write //products/). In PowerShell or cmd, drop the prefix.
+MSYS_NO_PATHCONV=1 python skills/agent-readiness-audit/scripts/agent_readiness_audit.py \
     --robots robots.txt --path /products/ \
     --html home.html --html product.html --expect "Acme Anvil" \
     --feed products.tsv --acp-feed openai-feed.jsonl --webmcp \
@@ -72,7 +74,7 @@ python skills/agent-readiness-audit/scripts/agent_readiness_audit.py \
     --site https://example.com --fetch --page https://example.com/products/anvil
 ```
 
-Exit codes: `0` no check failed (warnings allowed), `1` at least one check failed, `2` bad input (nothing to audit, a missing or unparseable file, a bad flag).
+Exit codes: `0` no check failed (warnings allowed), `1` at least one check failed, `2` bad input (nothing to audit, a missing, unreadable or unparseable file, a bad flag, a `--path` that doesn't start with `/`).
 
 ## A real run
 

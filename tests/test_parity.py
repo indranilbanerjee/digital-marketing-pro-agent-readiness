@@ -172,7 +172,13 @@ def _corpus(tmp: Path):
         ("broken xml", ["--feed", "broken.xml"]),
         ("bad jsonl", ["--acp-feed", "badline.jsonl"]),
         ("feed missing", ["--feed", "nope.tsv"]),
+        ("path without a slash", ["--robots", "open.txt", "--path", "products/"]),
+        ("path rewritten by Git Bash", ["--robots", "open.txt", "--path", "C:/Program Files/Git/products/"]),
+        ("double-slash path", ["--robots", "blocks.txt", "--path", "//products/"]),
+        ("empty file path", ["--html", ""]),
+        ("folder as a file", ["--robots", "a-folder"]),
     ]
+    (tmp / "a-folder").mkdir()
     return runs
 
 

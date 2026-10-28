@@ -55,7 +55,7 @@ From Google's [AI optimization guide](https://developers.google.com/search/docs/
 
 All checks run **offline** on files the user exports. The script fetches over the network only with `--fetch`.
 
-- **robots.txt**: `--robots FILE`, or `--site URL --fetch`. Add `--path /products/` (repeatable) to test the paths that matter, beyond `/`, which is always tested.
+- **robots.txt**: `--robots FILE`, or `--site URL --fetch`. Add `--path /products/` (repeatable) to test the paths that matter, beyond `/`, which is always tested. A `--path` must start with `/`; the script refuses anything else (exit `2`). On Windows, Git Bash (the shell Claude Code's Bash tool runs) rewrites `/products/` into a Windows folder before Python sees it: set `MSYS_NO_PATHCONV=1` for the command, as below, or write `//products/`, which the script reads as `/products/`. The `VAR=value command` prefix is POSIX shell syntax; drop it in PowerShell or cmd, which don't rewrite paths.
 - **Server HTML**: `--html FILE` (repeatable). Save it as the server sends it, for example with `curl -L URL > page.html`, **not** "Save as" from a browser, which saves the post-JavaScript DOM. Add `--expect "Product name"` (repeatable) for text that must be in that HTML, such as a product name or price.
 - **Merchant Center feed export**: `--feed FILE` (TSV, CSV, or RSS/Atom XML with `g:` attributes).
 - **Agentic-commerce product feed (optional)**: `--acp-feed FILE`. Accepts the JSONL "OpenAI format" or the Google-compatible CSV/TSV ([spec](https://developers.openai.com/commerce/specs/file-upload/products)).
@@ -69,7 +69,7 @@ Ask for these if they would change the audit: whether the site sells products (f
 `<skill-dir>` is the folder that contains this SKILL.md. Run the script with Python 3.10 or newer: `python`, or `python3` where `python` is not found (macOS, many Linux systems).
 
 ```bash
-python <skill-dir>/scripts/agent_readiness_audit.py \
+MSYS_NO_PATHCONV=1 python <skill-dir>/scripts/agent_readiness_audit.py \
     --robots robots.txt --path /products/ \
     --html home.html --html product.html --expect "Acme Anvil" \
     --feed products.tsv --acp-feed openai-feed.jsonl --webmcp \
@@ -88,7 +88,7 @@ Use `python3` where `python` is not Python 3. `--format text` prints a short hum
 Exit codes:
 - `0`: no check failed (warnings allowed)
 - `1`: at least one check failed
-- `2`: bad input (nothing to audit, a missing or unparseable file, a bad flag). The JSON output then carries an `error` key.
+- `2`: bad input (nothing to audit, a missing, unreadable or unparseable file, a bad flag, a `--path` that doesn't start with `/`). The JSON output then carries an `error` key.
 
 On `2`, fix the input and re-run. Do not interpret a partial run. If Python is not available, say so and stop; do not make up findings.
 
